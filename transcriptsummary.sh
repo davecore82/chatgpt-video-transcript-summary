@@ -12,7 +12,8 @@ fi
 YOUTUBEID="$1"
 FILE="/tmp/transcript.txt"
 OUTPUT_FILE="/tmp/chatgpt-output.txt"
-CHUNK_SIZE=12000
+CHUNK_SIZE=15500
+COUNTER=1
 
 # Clean up previous output and temporary files
 rm -f "$OUTPUT_FILE"
@@ -26,7 +27,9 @@ split -b "$CHUNK_SIZE" "$FILE"
 # Process each chunk with ChatGPT and append to output file
 for file in /tmp/x??
 do
+    echo "CHUNK $COUNTER" >> "$OUTPUT_FILE"
     chatgpt "give me a comprehensive summary including any important details of the following transcript: $(cat "$file")" >> "$OUTPUT_FILE"
+    ((COUNTER+=1))
 done
 
 # Clean up temporary files
