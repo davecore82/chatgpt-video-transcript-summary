@@ -24,10 +24,10 @@ transcript = YouTubeTranscriptApi.get_transcript(args.youtube_id, languages=[arg
 transcript_text = ' '.join([entry['text'] for entry in transcript])
 chunks = textwrap.wrap(transcript_text, chunk_size)
 
-#bot = ChatGPT()
-config = Config()
-config.set('chat.model', 'gpt4')
-bot = ChatGPT(config)
+bot = ChatGPT()
+#config = Config()
+#config.set('chat.model', 'gpt4')
+#bot = ChatGPT(config)
 
 
 # Process each chunk with ChatGPT and append to output
