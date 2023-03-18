@@ -2,14 +2,32 @@
 
 set -euo pipefail
 
+# Default language
+LANGUAGE="en"
+
+# Parse arguments
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        -l|--language)
+        LANGUAGE="$2"
+        shift 2
+        ;;
+        *)
+        YOUTUBEID="$1"
+        shift
+        ;;
+    esac
+done
+
 # Check if YouTube ID argument is provided
-if [[ $# -eq 0 ]]; then
+if [[ -z "${YOUTUBEID+x}" ]]; then
   echo "Error: You need to provide the YouTube ID."
   exit 1
 fi
 
 # Set variables
-YOUTUBEID="$1"
 FILE="/tmp/transcript.txt"
 OUTPUT_FILE="/tmp/chatgpt-output.txt"
 CHUNK_SIZE=15500
@@ -20,7 +38,7 @@ rm -f "$OUTPUT_FILE"
 rm -f /tmp/x??
 
 # Download transcript and split into chunks
-youtube_transcript_api --format text "$YOUTUBEID" > "$FILE"
+youtube_transcript_api --language "$LANGUAGE" --format text "$YOUTUBEID" > "$FILE"
 cd /tmp
 split -b "$CHUNK_SIZE" "$FILE"
 
