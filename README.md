@@ -2,26 +2,6 @@
 
 This Python script uses the ChatGPT API to create summaries of YouTube video transcripts. The level of detail in the summary can be adjusted by setting the verbosity level. The script downloads a video transcript, splits it into chunks, and processes each chunk with ChatGPT to generate a summarized version.
 
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/youtube-transcript-summarizer.git
-```
-
-2. Change directory to the project folder:
-
-```bash
-cd youtube-transcript-summarizer
-```
-
-3. Install the required dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
 ## Usage
 
 ```bash
@@ -39,7 +19,3 @@ python3 summarize_transcript.py --youtube-id dQw4w9WgXcQ --language en --verbose
 ```
 
 This command will generate a summary of the transcript for the YouTube video with ID "dQw4w9WgXcQ" in English, with verbosity level 1 (the least detailed summary).
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
