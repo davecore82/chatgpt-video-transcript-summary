@@ -4,6 +4,8 @@ import argparse
 import textwrap
 from youtube_transcript_api import YouTubeTranscriptApi
 from chatgpt_wrapper import ChatGPT
+from chatgpt_wrapper.config import Config
+
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -16,18 +18,22 @@ args = parser.parse_args()
 chunk_size = 15500
 counter = 1
 output = ""
-input_text = ""
 
 # Download transcript and split into chunks
 transcript = YouTubeTranscriptApi.get_transcript(args.youtube_id, languages=[args.language])
 transcript_text = ' '.join([entry['text'] for entry in transcript])
 chunks = textwrap.wrap(transcript_text, chunk_size)
 
-bot = ChatGPT()
+#bot = ChatGPT()
+config = Config()
+config.set('chat.model', 'gpt4')
+bot = ChatGPT(config)
+
 
 # Process each chunk with ChatGPT and append to output
 for chunk in chunks:
-    output += f"CHUNK {counter}\n"
+    input_text = ""
+    output += f"\n\nCHUNK {counter}\n"
     if args.language == "fr":
         input_text = "donne ta réponse en français, "
     # Modify input_text based on the value of args.verbose
@@ -38,10 +44,11 @@ for chunk in chunks:
     elif args.verbose == 3:
         input_text += f"give me a super highly detailed bulleted list of all the details in this video transcript: {chunk}"
     success, response, message = bot.ask(input_text)
-    if success:
+    try:
         output += response
-    else:
-        raise RuntimeError(message)
+    except:
+        pass
+
     counter += 1
 
 print(output)
