@@ -7,15 +7,16 @@ from chatgpt_wrapper import ChatGPT
 
 # Parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("-y", "--youtube-id", nargs='?', default="uorqgTk0C2o", help="YouTube ID")
+parser.add_argument("-y", "--youtube-id", help="YouTube ID", required=True)
 parser.add_argument("-l", "--language", default="en", help="Language")
-parser.add_argument("-v", "--verbose", type=int, choices=[1, 2, 3], default=2, help="Verbose level (1, 2, or 3)")
+parser.add_argument("-v", "--verbose", type=int, choices=[1, 2, 3], default=1, help="Verbose level (1, 2, or 3)")
 args = parser.parse_args()
 
 # Set variables
 chunk_size = 15500
 counter = 1
 output = ""
+input_text = ""
 
 # Download transcript and split into chunks
 transcript = YouTubeTranscriptApi.get_transcript(args.youtube_id, languages=[args.language])
@@ -36,7 +37,6 @@ for chunk in chunks:
         input_text += f"Can you provide a comprehensive summary of the given text? The summary should cover all the key points and main ideas presented in the original text, while also condensing the information into a concise and easy-to-understand format. Please ensure that the summary includes relevant details and examples that support the main ideas, while avoiding any unnecessary information or repetition. The length of the summary should be appropriate for the length and complexity of the original text, providing a clear and accurate overview without omitting any important information: {chunk}"
     elif args.verbose == 3:
         input_text += f"give me a super highly detailed bulleted list of all the details in this video transcript: {chunk}"
-    print(input_text)
     success, response, message = bot.ask(input_text)
     if success:
         output += response
